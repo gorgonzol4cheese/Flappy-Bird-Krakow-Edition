@@ -11,6 +11,8 @@ using namespace std;
 
 namespace Flappy {
 	
+	//struktura danych gry,
+	//zamiast tworzenia osobnych okien w nowych Stanach Gry, pakujemy je wszystkie do struktury
 	struct GameData {
 
 		StateMachine machine;
@@ -19,7 +21,10 @@ namespace Flappy {
 		InputManager input;
 	};
 
+	//shared_ptr powoduje, ze kazdy Stan Gry ma dostep do tych samych zasobow
+	//jesli tekstura jest zaladowana, to jest ona dostepna w calym GameData
 	typedef shared_ptr<GameData> GameDataRef;
+
 
 	class Game {
 	public:
