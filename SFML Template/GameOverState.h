@@ -8,7 +8,7 @@ namespace Flappy {
 	//MENU WEJSCIOWE/PIERWSZY EKRAN
 	class GameOverState : public State {
 	public:
-		GameOverState(GameDataRef data, int score);
+		GameOverState(GameDataRef data);
 
 		void Init(); //przygotowamnie
 		void HandleInput(); //obsluga wejscia
@@ -23,12 +23,5 @@ namespace Flappy {
 		sf::Sprite _gameOverTitle;
 		sf::Sprite _gameOverContainer;
 		sf::Sprite _retryButton;
-
-		sf::Text _scoreText;
-		sf::Text _highScoreText;
-
-		int _score;
-		int _highScore;
-
 	};
 }

@@ -1,44 +1,17 @@
 #include <sstream>
 #include <iostream>
-#include <fstream>
 #include "GameOverState.h"
 #include "DEFINITIONS.h"
 #include "GameState.h"
 
 namespace Flappy {
 
-	GameOverState::GameOverState(GameDataRef data, int score) : _data(data), _score(score)
-	{
+	GameOverState::GameOverState(GameDataRef data) : _data(data) {
 
 	}
 
 	//Ladowanie tekstury
-	void GameOverState::Init() 
-	{
-		//otwarcie pliku tekstowego z maksymalnym winikiem 
-		std::ifstream readFile;
-		readFile.open("Resources/Highscore.txt");
-
-		if (readFile.is_open())
-		{
-			while (!readFile.eof())
-			{
-				readFile >> _highScore;
-			}
-		}
-
-		readFile.close();
-
-		std::ofstream writeFile("Resources/Highscore.txt");
-
-		if (writeFile.is_open())
-		{
-			if (_score > _highScore)
-			{
-				_highScore = _score;
-			}
-			writeFile << _highScore;
-		}
+	void GameOverState::Init() {
 
 		//zaladowanie tekstury
 		_data->assets.LoadTexture("Game Over Background", GAME_OVER_BACKGROUND_FILEPATH); //w zbiorze _data idziemy do assets i ladujemy plik z dysku
@@ -54,23 +27,6 @@ namespace Flappy {
 		_gameOverContainer.setPosition((_data->window.getSize().x / 2) - (_gameOverContainer.getGlobalBounds().width / 2), (_data->window.getSize().y / 2) - (_gameOverContainer.getGlobalBounds().height / 2));
 		_gameOverTitle.setPosition((_data->window.getSize().x / 2) - (_gameOverTitle.getGlobalBounds().width / 2), _gameOverContainer.getPosition().y - (_gameOverTitle.getGlobalBounds().height * 1.2));
 		_retryButton.setPosition((_data->window.getSize().x / 2) - (_retryButton.getGlobalBounds().width / 2), _gameOverContainer.getPosition().y + _gameOverContainer.getGlobalBounds().height + (_retryButton.getGlobalBounds().height * 0.2));
-		
-		//pozycja wyniku
-		_scoreText.setFont(_data->assets.GetFont("Flappy Font"));
-		_scoreText.setString(std::to_string(_score));
-		_scoreText.setCharacterSize(56);
-		_scoreText.setFillColor(sf::Color::White);
-		_scoreText.setOrigin( _scoreText.getGlobalBounds().width/2, -_scoreText.getGlobalBounds().height/2 );
-		_scoreText.setPosition( _data->window.getSize().x / 10 * 7.25, _data->window.getSize().y / 2.38);
-
-		//pozycja najlepszego wyniku
-		_highScoreText.setFont(_data->assets.GetFont("Flappy Font"));
-		_highScoreText.setString(std::to_string(_highScore));
-		_highScoreText.setCharacterSize(56);
-		_highScoreText.setFillColor(sf::Color::White);
-		_highScoreText.setOrigin(_highScoreText.getGlobalBounds().width / 2, -_highScoreText.getGlobalBounds().height / 2);
-		_highScoreText.setPosition(_data->window.getSize().x / 10 * 7.25, _data->window.getSize().y / 1.95);
-
 	}
 
 	void GameOverState::HandleInput() {
@@ -79,7 +35,7 @@ namespace Flappy {
 		while (_data->window.pollEvent(event)) {
 
 			if (sf::Event::Closed == event.type) {
-				_data->window.close();        
+				_data->window.close();
 			}
 
 			if (_data->input.IsSpriteClicked(_retryButton, sf::Mouse::Left, _data->window)) {
@@ -102,9 +58,6 @@ namespace Flappy {
 		_data->window.draw(_gameOverTitle);
 		_data->window.draw(_gameOverContainer);
 		_data->window.draw(_retryButton);
-		_data->window.draw(_scoreText);
-		_data->window.draw(_highScoreText);
-
 
 		_data->window.display(); //wyswietla obraz na ekranie monitora (poprzez swap buforow
 	}
